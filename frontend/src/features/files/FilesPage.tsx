@@ -7,11 +7,7 @@ export function FilesPage() {
   const [files, setFiles] = useState<PortalFile[]>([])
 
   useEffect(() => {
-    api.get('/files').then((res) => setFiles(res.data)).catch(() => setFiles([
-      { id: 1, titulo: 'DRE - FEVEREIRO 2026', tipo_arquivo: 'DRE', mes_referencia: 'Fevereiro', ano_referencia: 2026, unit_names: ['alameda'] },
-      { id: 2, titulo: 'DRE - FEVEREIRO 2026', tipo_arquivo: 'DRE', mes_referencia: 'Fevereiro', ano_referencia: 2026, unit_names: ['Rio Branco'] },
-      { id: 3, titulo: 'DRE - JANEIRO 2026', tipo_arquivo: 'DRE', mes_referencia: 'Janeiro', ano_referencia: 2026, unit_names: ['vila prudente'] },
-    ]))
+    api.get('/files').then((res) => setFiles(res.data)).catch(() => setFiles([]))
   }, [])
 
   return (

@@ -2,24 +2,14 @@ import { useEffect, useState } from 'react'
 import api from '../../lib/api'
 import { User, Unit } from '../../types'
 import { SectionHeader } from '../../components/ui/SectionHeader'
-import { UserEditModal } from '../../components/modals/UserEditModal'
 
 export function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
   const [units, setUnits] = useState<Unit[]>([])
 
   useEffect(() => {
-    api.get('/users').then((res) => setUsers(res.data)).catch(() => setUsers([
-      { id: 1, nome: 'Aaa Ti Testes', email: 'teste@evoque.com', cpf: '51403556806', role: 'investor', is_active: true, is_authorized: false, unit_ids: [1, 2] },
-      { id: 2, nome: 'Aldo Rodrigues Teixeira', email: 'aldo@evoque.com', cpf: '11111111111', role: 'investor', is_active: true, is_authorized: true, unit_ids: [2] },
-    ]))
-    api.get('/units').then((res) => setUnits(res.data)).catch(() => setUnits([
-      { id: 1, nome: 'Ipiranga - Clube', endereco: '', cidade: '', estado: '', status_texto: 'Unidade a inaugurar' },
-      { id: 2, nome: 'RUI BARBOSA', endereco: '', cidade: '', estado: '', status_texto: 'Unidade inaugurada' },
-      { id: 3, nome: 'Rio Branco', endereco: '', cidade: '', estado: '', status_texto: 'Unidade inaugurada' },
-      { id: 4, nome: 'Santos', endereco: '', cidade: '', estado: '', status_texto: 'Unidade inaugurada' },
-      { id: 5, nome: 'alameda', endereco: '', cidade: '', estado: '', status_texto: 'Unidade inaugurada' },
-    ]))
+    api.get('/users').then((res) => setUsers(res.data)).catch(() => setUsers([]))
+    api.get('/units').then((res) => setUnits(res.data)).catch(() => setUnits([]))
   }, [])
 
   return (
@@ -37,7 +27,6 @@ export function UsersPage() {
           </div>
         ))}
       </div>
-      {users[0] && <UserEditModal user={users[0]} units={units} />}
     </div>
   )
 }

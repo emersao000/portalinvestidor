@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import api from '../../lib/api'
-import { Summary } from '../../types'
+import { Summary, PortalFile } from '../../types'
 import { SectionHeader } from '../../components/ui/SectionHeader'
 import { StatCard } from '../../components/ui/StatCard'
 
 export function DashboardPage() {
-  const [summary, setSummary] = useState<Summary>({ uploads: 303, units: 46, users: 155 })
+  const [summary, setSummary] = useState<Summary>({ uploads: 0, units: 0, users: 0 })
+  const [recentFiles, setRecentFiles] = useState<PortalFile[]>([])
 
   useEffect(() => {
     api.get('/dashboard/summary').then((res) => setSummary(res.data)).catch(() => undefined)
+    api.get('/files').then((res) => setRecentFiles(res.data.slice(0, 3))).catch(() => undefined)
   }, [])
 
   return (
@@ -30,17 +32,13 @@ export function DashboardPage() {
           <h3>Últimos arquivos enviados</h3>
           <a href="/arquivos">Ver todos</a>
         </div>
-        {[
-          ['DRE - FEVEREIRO 2026', 'alameda', 'DRE', 'Fevereiro'],
-          ['DRE - FEVEREIRO 2026', 'Rio Branco', 'DRE', 'Fevereiro'],
-          ['DRE - FEVEREIRO 2026', 'RUI BARBOSA', 'DRE', 'Fevereiro'],
-        ].map((row) => (
-          <div className="file-row" key={row.join('-')}>
+        {recentFiles.map((file) => (
+          <div className="file-row" key={file.id}>
             <span className="file-icon">▣</span>
-            <span>{row[0]}</span>
-            <span>{row[1]}</span>
-            <span>{row[2]}</span>
-            <span>{row[3]}</span>
+            <span>{file.titulo}</span>
+            <span>{file.unit_names.join(', ')}</span>
+            <span>{file.tipo_arquivo}</span>
+            <span>{file.mes_referencia}</span>
             <span>⇩</span>
           </div>
         ))}
