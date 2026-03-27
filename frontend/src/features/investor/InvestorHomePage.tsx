@@ -7,14 +7,8 @@ export function InvestorHomePage() {
   const [files, setFiles] = useState<PortalFile[]>([])
 
   useEffect(() => {
-    api.get('/investor/units').then((res) => setUnits(res.data)).catch(() => setUnits([
-      { id: 1, nome: 'alameda', endereco: '', cidade: '', estado: '', status_texto: 'Unidade inaugurada' },
-      { id: 2, nome: 'Rio Branco', endereco: '', cidade: '', estado: '', status_texto: 'Unidade inaugurada' },
-    ]))
-    api.get('/files').then((res) => setFiles(res.data)).catch(() => setFiles([
-      { id: 1, titulo: 'DRE - FEVEREIRO 2026', tipo_arquivo: 'DRE', mes_referencia: 'Fevereiro', ano_referencia: 2026, unit_names: ['alameda'] },
-      { id: 2, titulo: 'DRE - FEVEREIRO 2026', tipo_arquivo: 'DRE', mes_referencia: 'Fevereiro', ano_referencia: 2026, unit_names: ['Rio Branco'] },
-    ]))
+    api.get('/investor/units').then((res) => setUnits(res.data)).catch(() => setUnits([]))
+    api.get('/files').then((res) => setFiles(res.data)).catch(() => setFiles([]))
   }, [])
 
   return (

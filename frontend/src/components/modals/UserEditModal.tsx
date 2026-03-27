@@ -1,36 +1,144 @@
+import { useState } from 'react'
 import { User, Unit } from '../../types'
 
-export function UserEditModal({ user, units }: { user: User; units: Unit[] }) {
+interface UserEditModalProps {
+  user: User
+  units: Unit[]
+  onClose: () => void
+  onSubmit: (data: Partial<User>) => Promise<void>
+}
+
+export function UserEditModal({ user, units, onClose, onSubmit }: UserEditModalProps) {
+  const [formData, setFormData] = useState<Partial<User>>({
+    is_authorized: user.is_authorized,
+    role: user.role,
+    is_active: user.is_active,
+    unit_ids: user.unit_ids,
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleChange = (field: string, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+    setError('')
+  }
+
+  const handleUnitToggle = (unitId: number) => {
+    setFormData((prev) => {
+      const unit_ids = prev.unit_ids || []
+      return {
+        ...prev,
+        unit_ids: unit_ids.includes(unitId)
+          ? unit_ids.filter((id) => id !== unitId)
+          : [...unit_ids, unitId],
+      }
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      await onSubmit(formData)
+      onClose()
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Erro ao atualizar usuário')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <div className="modal-overlay">
-      <div className="modal-card">
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-card modal-card-large" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Editar usuário</h2>
-          <span>×</span>
+          <button onClick={onClose} className="modal-close-btn">
+            ×
+          </button>
         </div>
-        <div className="modal-grid">
-          <div className="photo-placeholder" />
-          <div>
-            <label>Nome</label>
-            <input value={user.nome} readOnly />
-            <div className="row-inline">
-              <input value={user.cpf} readOnly />
-              <button className="square-button">✓</button>
+
+        <form onSubmit={handleSubmit} className="modal-form">
+          {/* User Info Section */}
+          <div className="modal-section">
+            <h3>Informações do usuário</h3>
+            <div className="form-group">
+              <label>Nome</label>
+              <input type="text" value={user.nome} disabled style={{ backgroundColor: '#f5f5f5' }} />
             </div>
-            <label className="checkbox-row"><input type="checkbox" checked={user.is_authorized} readOnly /> Este usuário está autorizado?</label>
-            <label className="checkbox-row"><input type="checkbox" checked={user.role === 'admin'} readOnly /> Este usuário é um administrador?</label>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Email</label>
+                <input type="email" value={user.email} disabled style={{ backgroundColor: '#f5f5f5' }} />
+              </div>
+              <div className="form-group">
+                <label>CPF</label>
+                <input type="text" value={user.cpf} disabled style={{ backgroundColor: '#f5f5f5' }} />
+              </div>
+            </div>
           </div>
-        </div>
-        <h3>Unidades</h3>
-        <div className="unit-chip-list">
-          {units.slice(0, 5).map((unit) => (
-            <div key={unit.id} className="unit-chip">
-              <span className="mini-avatar">EV</span>
-              <span>{unit.nome}</span>
-              <input type="checkbox" checked={user.unit_ids.includes(unit.id)} readOnly />
+
+          {/* Permissions Section */}
+          <div className="modal-section">
+            <h3>Permissões e funções</h3>
+            <label className="checkbox-group">
+              <input
+                type="checkbox"
+                checked={formData.is_active || false}
+                onChange={(e) => handleChange('is_active', e.target.checked)}
+                disabled={loading}
+              />
+              <span>Usuário ativo</span>
+            </label>
+            <label className="checkbox-group">
+              <input
+                type="checkbox"
+                checked={formData.is_authorized || false}
+                onChange={(e) => handleChange('is_authorized', e.target.checked)}
+                disabled={loading}
+              />
+              <span>Autorizado a acessar</span>
+            </label>
+            <label className="checkbox-group">
+              <input
+                type="checkbox"
+                checked={formData.role === 'admin'}
+                onChange={(e) => handleChange('role', e.target.checked ? 'admin' : 'investor')}
+                disabled={loading}
+              />
+              <span>Administrador</span>
+            </label>
+          </div>
+
+          {/* Units Section */}
+          <div className="modal-section">
+            <h3>Unidades associadas</h3>
+            <div className="unit-checklist">
+              {units.map((unit) => (
+                <label key={unit.id} className="checkbox-group">
+                  <input
+                    type="checkbox"
+                    checked={formData.unit_ids?.includes(unit.id) || false}
+                    onChange={() => handleUnitToggle(unit.id)}
+                    disabled={loading}
+                  />
+                  <span>{unit.nome}</span>
+                </label>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+
+          {error && <div className="form-error">{error}</div>}
+
+          <div className="modal-actions">
+            <button type="button" onClick={onClose} className="btn-secondary" disabled={loading}>
+              Cancelar
+            </button>
+            <button type="submit" className="btn-primary" disabled={loading}>
+              {loading ? 'Salvando...' : 'Salvar alterações'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )
