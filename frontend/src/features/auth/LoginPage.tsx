@@ -1,19 +1,18 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import api from '../../lib/api'
+import { useAuth } from '../../contexts/AuthContext'
 
 export function LoginPage() {
   const navigate = useNavigate()
-  const [email, setEmail] = useState('admin@evoque.local')
-  const [password, setPassword] = useState('Admin@1234')
+  const { login } = useAuth()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
     try {
-      const { data } = await api.post('/auth/login', { email, password })
-      localStorage.setItem('portal_token', data.access_token)
-      localStorage.setItem('portal_user', JSON.stringify(data.user))
+      await login(email, password)
       navigate('/')
     } catch {
       setError('Não foi possível entrar. Verifique as credenciais.')

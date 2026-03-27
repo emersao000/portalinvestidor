@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import api from '../../lib/api'
+import { useAuth } from '../../contexts/AuthContext'
 
 export function RegisterPage() {
+  const { register } = useAuth()
   const [form, setForm] = useState({ nome: '', cpf: '', email: '', password: '', confirmPassword: '' })
   const [message, setMessage] = useState('')
 
@@ -13,7 +14,7 @@ export function RegisterPage() {
       return
     }
     try {
-      await api.post('/auth/register', form)
+      await register(form.nome, form.cpf, form.email, form.password)
       setMessage('Cadastro enviado. Agora é só esperar o admin dar aquele carimbo de aprovado 😎')
     } catch {
       setMessage('Não foi possível cadastrar agora.')
