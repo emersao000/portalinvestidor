@@ -87,7 +87,7 @@ button, input { font: inherit; }
 .unit-chip { display: grid; grid-template-columns: 32px 1fr 24px; gap: 8px; align-items: center; border-top: 1px solid #f0f0f0; padding-top: 8px; }
 .mini-avatar { width: 28px; height: 28px; border-radius: 50%; background: #ddd; display: grid; place-items: center; font-size: 10px; }
 .auth-page { min-height: 100vh; display: grid; grid-template-columns: 1.05fr 1fr; background: #fafafa; }
-.auth-hero { background: linear-gradient(90deg, rgba(50,10,0,0.88), rgba(255,90,0,0.82)), url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1600&auto=format&fit=crop'); background-size: cover; color: white; padding: 70px 34px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; display: flex; flex-direction: column; justify-content: center; }
+.auth-hero { background: linear-gradient(90deg, rgba(50,10,0,0.88), rgba(255,90,0,0.82)), url('https://cdn.builder.io/api/v1/image/assets%2F2cca9d64ecab4daabee98ac136f05faa%2F54fbb63fc5b74388889b1266c79d1788?format=webp&width=800&height=1200'); background-size: cover; color: white; padding: 70px 34px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; display: flex; flex-direction: column; justify-content: center; }
 .auth-hero h1, .auth-hero h2 { margin: 0; font-size: 52px; }
 .auth-hero h2 { font-size: 38px; font-weight: 400; }
 .auth-hero p { font-size: 28px; }
