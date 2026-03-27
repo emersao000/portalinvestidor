@@ -28,17 +28,20 @@ export function RegisterPage() {
         <h2>Portal do Investidor</h2>
         <p>Cadastre-se para acessar a sua conta.</p>
       </div>
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <h2>Cadastre-se</h2>
-        <input placeholder="Nome Completo" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
-        <input placeholder="CPF" value={form.cpf} onChange={(e) => setForm({ ...form, cpf: e.target.value })} />
-        <input placeholder="E-mail" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-        <input placeholder="Senha" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
-        <input placeholder="Confirmar Senha" type="password" value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} />
-        {message ? <div className="info-box">{message}</div> : null}
-        <button type="submit">Cadastrar</button>
-        <p>Já tem cadastro? <Link to="/login">Ir para o Login</Link></p>
-      </form>
+      <div className="auth-form-container">
+        <img src="https://cdn.builder.io/api/v1/image/assets%2F2cca9d64ecab4daabee98ac136f05faa%2Fb3ddccaa72a54c039814332cf73cac06?format=webp&width=800&height=1200" alt="voque ACADEMIA" className="auth-logo" />
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <h2>Cadastre-se</h2>
+          <input placeholder="Nome Completo" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
+          <input placeholder="CPF" value={form.cpf} onChange={(e) => setForm({ ...form, cpf: e.target.value })} />
+          <input placeholder="E-mail" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+          <input placeholder="Senha" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+          <input placeholder="Confirmar Senha" type="password" value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} />
+          {message ? <div className="info-box">{message}</div> : null}
+          <button type="submit">Cadastrar</button>
+          <p>Já tem cadastro? <Link to="/login">Ir para o Login</Link></p>
+        </form>
+      </div>
     </div>
   )
 }
