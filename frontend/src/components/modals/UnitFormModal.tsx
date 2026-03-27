@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Unit } from '../../types'
 
 interface UnitFormModalProps {
@@ -8,19 +8,45 @@ interface UnitFormModalProps {
 }
 
 export function UnitFormModal({ unit, onClose, onSubmit }: UnitFormModalProps) {
-  const [formData, setFormData] = useState<Partial<Unit>>({
+  const [formData, setFormData] = useState<Partial<Unit> & { foto_url?: string }>({
     nome: unit?.nome || '',
     endereco: unit?.endereco || '',
     cidade: unit?.cidade || '',
     estado: unit?.estado || '',
     status_texto: unit?.status_texto || 'Unidade inaugurada',
+    foto_url: unit?.foto_url || '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [preview, setPreview] = useState<string>(unit?.foto_url || '')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
     setError('')
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      setError('Selecione uma imagem válida (PNG, JPG, etc)')
+      return
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError('A imagem não pode ultrapassar 5MB')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      const base64 = reader.result as string
+      setPreview(base64)
+      setFormData((prev) => ({ ...prev, foto_url: base64 }))
+    }
+    reader.readAsDataURL(file)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,12 +68,53 @@ export function UnitFormModal({ unit, onClose, onSubmit }: UnitFormModalProps) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-card modal-card-large" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{unit ? 'Editar unidade' : 'Cadastrar unidade'}</h2>
           <button onClick={onClose} className="modal-close-btn">×</button>
         </div>
         <form onSubmit={handleSubmit} className="modal-form">
+          <div className="photo-upload-section">
+            <div className="photo-preview">
+              {preview ? (
+                <img src={preview} alt="Preview" />
+              ) : (
+                <div className="photo-placeholder-empty">
+                  <span>📷</span>
+                  <p>Foto da unidade</p>
+                </div>
+              )}
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="btn-secondary"
+              disabled={loading}
+            >
+              Selecionar foto
+            </button>
+            {preview && (
+              <button
+                type="button"
+                onClick={() => {
+                  setPreview('')
+                  setFormData((prev) => ({ ...prev, foto_url: '' }))
+                  if (fileInputRef.current) fileInputRef.current.value = ''
+                }}
+                className="btn-secondary btn-danger"
+                disabled={loading}
+              >
+                Remover foto
+              </button>
+            )}
+          </div>
           <div className="form-group">
             <label>Nome da unidade *</label>
             <input

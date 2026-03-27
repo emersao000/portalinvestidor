@@ -62,7 +62,18 @@ button, input { font: inherit; }
 .unit-info p, .unit-info span, .user-mail, .user-role { color: #666; margin: 4px 0; }
 .unit-actions, .user-actions { text-align: right; font-size: 22px; letter-spacing: 8px; }
 .filters-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 12px; }
-.filter-box { background: white; border-radius: 14px; border: 1px solid #ddd; padding: 16px 20px; color: #808080; display: flex; justify-content: space-between; }
+.filter-box { background: white; border-radius: 14px; border: 1px solid #ddd; padding: 0; overflow: hidden; display: flex; align-items: stretch; position: relative; }
+.filter-box select { flex: 1; border: none; padding: 16px 20px; outline: none; cursor: pointer; background: white; color: #333; font-weight: 500; }
+.filter-clear { border: none; background: none; cursor: pointer; padding: 0 12px; color: #999; font-size: 18px; }
+.filter-clear:hover { color: #333; }
+.link-button { background: none; border: none; color: var(--orange); cursor: pointer; text-decoration: underline; font-weight: 600; font-size: 13px; }
+.modal-section { border-bottom: 1px solid #eee; padding-bottom: 16px; margin-bottom: 16px; }
+.modal-section:last-child { border-bottom: none; }
+.modal-section h3 { margin: 0 0 12px; font-size: 14px; font-weight: 600; color: #333; }
+.checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; font-size: 14px; }
+.checkbox-group input[type="checkbox"] { cursor: pointer; width: 18px; height: 18px; }
+.unit-checklist { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
+.unit-checklist label { margin-bottom: 0; }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; }
 .modal-card { width: 310px; max-width: calc(100vw - 40px); background: white; border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -114,7 +125,27 @@ button, input { font: inherit; }
 .modal-overlay { animation: fadeIn 0.2s ease-out; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .modal-card { animation: slideUp 0.3s ease-out; }
+.modal-card-large { width: 450px; }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.photo-upload-section { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.photo-preview { width: 100%; height: 200px; border-radius: 12px; border: 2px dashed #ddd; display: grid; place-items: center; overflow: hidden; background: #f9f9f9; }
+.photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+.photo-placeholder-empty { display: flex; flex-direction: column; align-items: center; gap: 8px; color: #999; }
+.photo-placeholder-empty span { font-size: 48px; }
+.photo-placeholder-empty p { margin: 0; font-size: 14px; }
+.btn-danger { border-color: #e74c3c; color: #c0392b; }
+.btn-danger:hover { background: #ffe1e1; }
+.pagination-container { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 28px; padding: 16px 0; }
+.pagination-btn { border: 1px solid #ddd; background: white; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; }
+.pagination-btn:hover:not(:disabled) { border-color: var(--orange); color: var(--orange); }
+.pagination-btn:disabled { color: #999; cursor: not-allowed; }
+.pagination-numbers { display: flex; gap: 8px; }
+.pagination-number { border: 1px solid #ddd; background: white; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+.pagination-number:hover { border-color: var(--orange); }
+.pagination-number.active { background: var(--orange); color: white; border-color: var(--orange); }
+.pagination-dots { color: #999; padding: 0 4px; }
+.items-per-page { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.items-per-page select { padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px; }
 @media (max-width: 1100px) {
   .stats-grid, .filters-grid, .investor-grid { grid-template-columns: 1fr; }
   .portal-layout { grid-template-columns: 1fr; }

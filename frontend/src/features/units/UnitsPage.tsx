@@ -3,12 +3,16 @@ import api from '../../lib/api'
 import { Unit } from '../../types'
 import { SectionHeader } from '../../components/ui/SectionHeader'
 import { UnitFormModal } from '../../components/modals/UnitFormModal'
+import { Pagination } from '../../components/ui/Pagination'
+
+const ITEMS_PER_PAGE = 10
 
 export function UnitsPage() {
   const [units, setUnits] = useState<Unit[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editingUnit, setEditingUnit] = useState<Unit | undefined>()
+  const [currentPage, setCurrentPage] = useState(1)
 
   const loadUnits = () => {
     api.get('/units').then((res) => setUnits(res.data)).catch(() => setUnits([]))
@@ -21,6 +25,12 @@ export function UnitsPage() {
   const filteredUnits = units.filter((unit) =>
     unit.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
     unit.cidade.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const totalPages = Math.ceil(filteredUnits.length / ITEMS_PER_PAGE)
+  const paginatedUnits = filteredUnits.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   )
 
   const handleOpenCreateModal = () => {
@@ -73,14 +83,23 @@ export function UnitsPage() {
         <input
           placeholder="Pesquisar"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value)
+            setCurrentPage(1)
+          }}
         />
         <button>⌕</button>
       </div>
       <div className="list-stack">
-        {filteredUnits.map((unit) => (
+        {paginatedUnits.map((unit) => (
           <div className="unit-card" key={unit.id}>
-            <div className="unit-photo">SEM FOTO</div>
+            <div className="unit-photo">
+              {unit.foto_url ? (
+                <img src={unit.foto_url} alt={unit.nome} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                'SEM FOTO'
+              )}
+            </div>
             <div className="unit-info">
               <strong>{unit.nome}</strong>
               <p>{[unit.endereco, unit.cidade, unit.estado].filter(Boolean).join(' - ')}</p>
@@ -93,6 +112,14 @@ export function UnitsPage() {
           </div>
         ))}
       </div>
+      {filteredUnits.length > 0 && (
+        <>
+          <div style={{ textAlign: 'center', fontSize: '13px', color: '#666', marginTop: '16px' }}>
+            Mostrando {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, filteredUnits.length)} a {Math.min(currentPage * ITEMS_PER_PAGE, filteredUnits.length)} de {filteredUnits.length} unidades
+          </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        </>
+      )}
       {showModal && (
         <UnitFormModal
           unit={editingUnit}
