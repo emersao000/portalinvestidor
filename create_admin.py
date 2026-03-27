@@ -12,6 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent / 'backend'))
 
 from app.db.session import SessionLocal
+from app.db.init_db import init_db
 from app.models.user import User
 from app.core.security import get_password_hash
 from app.utils.validators import normalize_cpf
@@ -19,6 +20,14 @@ from app.utils.validators import normalize_cpf
 
 def create_admin():
     """Cria um usuário administrador interativamente."""
+    # Inicializa o banco de dados (cria tabelas se não existirem)
+    print("Inicializando banco de dados...")
+    try:
+        init_db()
+    except Exception as e:
+        print(f"❌ Erro ao inicializar banco de dados: {e}")
+        return False
+
     print("\n" + "=" * 50)
     print("CRIAR USUÁRIO ADMINISTRADOR")
     print("=" * 50 + "\n")
