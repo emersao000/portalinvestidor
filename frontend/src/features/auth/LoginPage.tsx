@@ -26,14 +26,17 @@ export function LoginPage() {
         <h2>Portal do Investidor</h2>
         <p>Acesse sua conta com segurança.</p>
       </div>
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <div className="auth-form-container">
+        <img src="https://cdn.builder.io/api/v1/image/assets%2F2cca9d64ecab4daabee98ac136f05faa%2Fb3ddccaa72a54c039814332cf73cac06?format=webp&width=800&height=1200" alt="voque ACADEMIA" className="auth-logo" />
+        <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Entrar</h2>
         <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-mail" />
         <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Senha" type="password" />
         {error ? <div className="error-box">{error}</div> : null}
         <button type="submit">Entrar</button>
         <p>Não tem cadastro? <Link to="/cadastro">Cadastre-se</Link></p>
-      </form>
+        </form>
+      </div>
     </div>
   )
 }
