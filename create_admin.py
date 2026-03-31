@@ -42,6 +42,10 @@ def create_admin():
 
     print("\n" + "=" * 50)
     print("CRIAR USUÁRIO ADMINISTRADOR")
+    print("=" * 50)
+    print("\nCredenciais padrão sugeridas:")
+    print("  E-mail: admin@academiaevoque.com.br")
+    print("  Senha : 12345678")
     print("=" * 50 + "\n")
 
     # Coleta informações do usuário
