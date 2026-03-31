@@ -13,8 +13,8 @@ echo API Docs : http://localhost:8000/docs
 echo Frontend : http://localhost:3020
 echo.
 echo Login padrao do admin:
-echo   E-mail : admin@evoque.local
-echo   Senha  : Admin@1234
+echo   E-mail : admin@academiaevoque.com.br
+echo   Senha  : 12345678
 echo.
 
 REM Instala/atualiza dependencias do backend
