@@ -20,9 +20,9 @@ def create_admin():
     db: Session = SessionLocal()
     try:
         # Dados do admin (você pode alterar conforme necessário)
-        admin_email = 'admin@evoque.com.br'
+        admin_email = 'admin@academiaevoque.com.br'
         admin_password = 'Admin@123456'  # Altere para uma senha segura
-        admin_nome = 'Administrador'
+        admin_nome = 'EMERSON SILVA'
 
         # Verificar se o admin já existe
         existing_admin = db.query(User).filter(User.email == admin_email.lower()).first()
